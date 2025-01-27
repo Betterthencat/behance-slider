@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Before/After Slider</title>
+    <style>
+        * {
+            outline: none !important;
+            user-select: none;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }
+        .slider-container {
+            position: relative;
+            width: 600px;
+            height: 400px;
+            overflow: hidden;
+            cursor: ew-resize;
+        }
+        .slider-container img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .slider-container .after {
+            clip-path: inset(0 50% 0 0);
+        }
+        .slider-handle {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 5px;
+            height: 100%;
+            background-color: #000;
+            cursor: ew-resize;
+            transform: translateX(-50%);
+        }
+    </style>
+</head>
+<body>
+    <div class="slider-container" id="slider">
+        <img src="before.jpg" alt="Before" class="before">
+        <img src="after.jpg" alt="After" class="after" id="afterImage">
+        <div class="slider-handle" id="sliderHandle"></div>
+    </div>
+
+    <script>
+        const slider = document.getElementById('slider');
+        const afterImage = document.getElementById('afterImage');
+        const sliderHandle = document.getElementById('sliderHandle');
+
+        slider.addEventListener('mousemove', (e) => {
+            if (e.buttons === 1) { // Проверяем, зажата ли кнопка мыши
+                const rect = slider.getBoundingClientRect();
+                const offsetX = e.clientX - rect.left;
+                const percentage = (offsetX / slider.offsetWidth) * 100;
+
+                // Ограничиваем движение в пределах 0% - 100%
+                if (percentage >= 0 && percentage <= 100) {
+                    afterImage.style.clipPath = `inset(0 ${100 - percentage}% 0 0)`;
+                    sliderHandle.style.left = `${percentage}%`;
+                }
+            }
+        });
+    </script>
+</body>
+</html>
